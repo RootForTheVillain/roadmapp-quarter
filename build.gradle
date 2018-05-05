@@ -1,13 +1,13 @@
 buildscript {
     repositories {
         //maven { url 'https://repo.maven.apache.org/maven2/' }
-        //maven { url 'https://plugins.gradle.org/m2/' }
-        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        //jcenter()
     }
 
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE'
-        //classpath 'gradle.plugin.com.palantir.gradle.docker:gradle-docker:4.4'
+        classpath 'gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.19.2'
     }
 }
 
@@ -17,7 +17,7 @@ plugins {
     id 'application'
     //id 'org.springframework.boot'
     //id 'io.spring.dependency-management'
-    //id 'com.palantir.docker-run'
+    id 'com.palantir.docker-run' version '0.19.2'
 }
 
 mainClassName = 'io.roadmapp.quarter.Application'
