@@ -14,10 +14,13 @@ buildscript {
 plugins {
     id 'java'
     id 'idea'
+    id 'application'
     //id 'org.springframework.boot'
     //id 'io.spring.dependency-management'
     //id 'com.palantir.docker-run'
 }
+
+mainClassName = 'io.roadmapp.quarter.Application'
 
 group 'io.roadmapp.quarter'
 version '1.0-SNAPSHOT'
@@ -35,6 +38,6 @@ repositories {
 
 dependencies {
     //testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile('org.springframework.boot:spring-boot-starter-web')
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-ws', version: '1.4.7.RELEASE'
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
