@@ -1,43 +1,63 @@
 buildscript {
     repositories {
-        //maven { url 'https://repo.maven.apache.org/maven2/' }
-        maven { url 'https://plugins.gradle.org/m2/' }
+        //maven { url "https://repo.maven.apache.org/maven2/" }
+        maven { url "https://plugins.gradle.org/m2/" }
         //jcenter()
     }
 
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE'
-        classpath 'gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.19.2'
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE"
+        classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.19.2"
     }
 }
 
 plugins {
-    id 'java'
-    id 'idea'
-    id 'application'
-    //id 'org.springframework.boot'
-    //id 'io.spring.dependency-management'
-    id 'com.palantir.docker-run' version '0.19.2'
+    id "java"
+    id "idea"
+    id "application"
+    id "org.springframework.boot" version "2.0.1.RELEASE"
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+    id "com.palantir.docker" version "0.19.2"
+    id "com.palantir.docker-run" version "0.19.2"
 }
 
-mainClassName = 'io.roadmapp.quarter.Application'
+bootJar {
+    baseName = "roadmapp-quarter"
+    version "1.0.0-SNAPSHOT"
+}
 
-group 'io.roadmapp.quarter'
-version '1.0-SNAPSHOT'
+mainClassName = "io.roadmapp.quarter.Application"
 
-sourceCompatibility = 1.8
+group "roadmapp"
 
 repositories {
     mavenCentral()
 }
 
-/*docker {
-    name "${project.group}/${jar.baseName}"
-    files jar.archivePath
-}*/
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+docker {
+    dependsOn build
+
+    name "${project.group}/${bootJar.baseName}"
+    files bootJar.archivePath
+    buildArgs(["JAR_FILE": "${bootJar.archiveName}"])
+}
+
+dockerRun {
+    name 'name-from-build-gradle-dockerRun'
+    image 'openjdk:8-jre-alpine'
+    //volumes 'hostvolume': '/containervolume'
+    ports '8080:8080'
+    //clean true
+    //env 'MYVAR1': 'MYVALUE1', 'MYVAR2': 'MYVALUE2'
+    //command 'sleep', '100'
+}
 
 dependencies {
-    //testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-ws', version: '1.4.7.RELEASE'
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    //testCompile group: "junit", name: "junit", version: "4.12"
+    compile group: "org.springframework.boot", name: "spring-boot-starter-ws", version: "1.4.7.RELEASE"
+    compile group: 'joda-time', name: 'joda-time', version: '2.8.1'
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
